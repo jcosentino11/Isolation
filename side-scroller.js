@@ -20,8 +20,8 @@ $(function() {
                 sheet: "player",  // Setting a sprite sheet sets sprite width and height
                 sprite: "player",
                 type: Q.SPRITE_PLAYER,
-                x: 250,
-                y: 100
+                points: [ [ -16, 44], [ -23, 35 ], [-23,-48], [23,-48], [23, 35 ], [ 16, 44 ]],
+                jumpSpeed: -400
             });
             this.add('2d, platformerControls, animation, tween');
         },
@@ -51,8 +51,10 @@ $(function() {
 
     Q.scene('game',function(stage) {
         Q.stageTMX("level1.tmx",stage);
-        var player = stage.insert(new Q.Player());
-        stage.add("viewport").follow(player);
+        stage.add("viewport").follow(Q("Player").first());
+
+        Q.debug = true;
+        //Q.debugFill = true;
     });
 
     ////Asset Loading  & Game Start//////////////////////////////
