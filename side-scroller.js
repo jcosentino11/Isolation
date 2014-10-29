@@ -20,7 +20,7 @@ $(function() {
                 sheet: "player",  // Setting a sprite sheet sets sprite width and height
                 sprite: "player",
                 type: Q.SPRITE_PLAYER,
-                x: 200,
+                x: 250,
                 y: 100
             });
             this.add('2d, platformerControls, animation, tween');
