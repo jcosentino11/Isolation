@@ -47,6 +47,7 @@ $(function() {
                 morph: false,       //true when in morph mode,
                 walkingSpeed: 200,
                 rollingSpeed: 300,
+                bounceBack: 30
             });
             
             this.p.rollAngle = Math.atan(this.p.rollingSpeed/25) * (180 / Math.PI) / 12;
@@ -65,7 +66,6 @@ $(function() {
 
         attacked: function(col){
             if(col.obj instanceof Q.Enemy){
-                console.log(this.p.health)
                 this.p.health -= col.obj.p.attack;
                 Q.state.set('health',this.p.health);
 
@@ -74,9 +74,8 @@ $(function() {
                     Q.stageScene("game");
                 }
 
-                //add bounceback?
-                // this.p.vx = col.impact * col.normalX;
-                // this.p.vy = col.impact * col.normalY;
+                this.p.x += col.normalX * this.p.bounceBack;
+                this.p.y -= this.p.bounceBack / 2;
             }
         },
 
