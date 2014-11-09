@@ -248,7 +248,7 @@ $(function() {
                 y: 20,
                 size: 18,
                 family: "Tahoma",
-                color: "black"
+                color: "white"
             });
 
             Q.state.on("change.health",this,"health");
