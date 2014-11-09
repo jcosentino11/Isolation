@@ -46,7 +46,7 @@ $(function() {
                 morphing: false,    //true when morphing
                 morph: false,       //true when in morph mode,
                 walkingSpeed: 200,
-                rollingSpeed: 300,
+                rollingSpeed: 400,
                 bounceBack: 30
             });
             
@@ -151,7 +151,7 @@ $(function() {
             this.p.morph = false;
             this.p.morphing = false;
             this.p.points = this.p.walkingPoints;
-            this.p.speed = this.p.rollingSpeed;
+            this.p.speed = this.p.walkingSpeed;
             this.c.points = this.p.walkingCollisionPoints;  //prevent collision errors after changing points
             this.p.cy = 49;
         }
