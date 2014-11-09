@@ -42,6 +42,7 @@ $(function() {
                 rollingPoints: Q.generateCirclePoints(0,0,33),
                 jumpSpeed: -400,
                 attack: 5,
+                maxHealth: Q.state.get('health'),
                 health: Q.state.get('health'),
                 morphing: false,    //true when morphing
                 morph: false,       //true when in morph mode,
@@ -68,6 +69,16 @@ $(function() {
             if(col.obj instanceof Q.Enemy){
                 this.p.health -= col.obj.p.attack;
                 Q.state.set('health',this.p.health);
+                
+                if(this.p.health > this.p.maxHealth * 0.75) {
+                   this.p.sheet = "player1";
+                } else if(this.p.health > this.p.maxHealth * 0.5) {
+                    this.p.sheet = "player2";
+                } else if(this.p.health > this.p.maxHealth * 0.25) {
+                    this.p.sheet = "player3";
+                } else {
+                    this.p.sheet = "player4";
+                }
 
                 if(this.p.health <= 0){
                     //player died
