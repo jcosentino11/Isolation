@@ -9,8 +9,8 @@ $(function() {
     
     
     
-//    Q.debug = true;
-//    Q.debugFill = true;
+    Q.debug = true;
+    Q.debugFill = true;
     
 
     Q.generateCirclePoints = function(a,b,r){
@@ -39,7 +39,8 @@ $(function() {
                 sprite: "player",
                 type: Q.SPRITE_PLAYER,
                 walkingPoints: [ [ -16, 44], [ -23, 35 ], [-23,-48], [23,-48], [23, 35 ], [ 16, 44 ]],
-                rollingPoints: Q.generateCirclePoints(0,15,32),
+//                rollingPoints: Q.generateCirclePoints(0,15,32),
+                rollingPoints: Q.generateCirclePoints(0,0,33),
                 jumpSpeed: -400,
                 attack: 5,
                 health: Q.state.get('health'),
@@ -123,7 +124,7 @@ $(function() {
                 }else{
                     this.walk(dt);
                 }
-                if(Q.inputs["down"]){
+                if(Q.inputs["down"] || Q.inputs["fire"]){
                     if(this.p.morph){
                         this.p.angle = 0;
                         this.play("unmorphing",1);
@@ -144,6 +145,7 @@ $(function() {
             this.p.morphing = false;
             this.p.points = this.p.rollingPoints;
             this.p.speed = this.p.rollingSpeed;
+            this.p.cy = 65;
         },
         
         unmorphed: function(){
@@ -153,6 +155,7 @@ $(function() {
             this.p.points = this.p.walkingPoints;
             this.p.speed = this.p.rollingSpeed;
             this.c.points = this.p.walkingCollisionPoints;  //prevent collision errors after changing points
+            this.p.cy = 49;
         }
     });
 
