@@ -143,7 +143,7 @@ $(function() {
             this.p.morphing = false;
             this.p.points = this.p.rollingPoints;
             this.p.speed = this.p.rollingSpeed;
-            this.p.cy = 65;
+            this.p.cy = 62;
         },
         
         unmorphed: function(){
