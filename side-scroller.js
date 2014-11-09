@@ -39,7 +39,6 @@ $(function() {
                 sprite: "player",
                 type: Q.SPRITE_PLAYER,
                 walkingPoints: [ [ -16, 44], [ -23, 35 ], [-23,-48], [23,-48], [23, 35 ], [ 16, 44 ]],
-//                rollingPoints: Q.generateCirclePoints(0,15,32),
                 rollingPoints: Q.generateCirclePoints(0,0,33),
                 jumpSpeed: -400,
                 attack: 5,
@@ -124,7 +123,7 @@ $(function() {
                 }else{
                     this.walk(dt);
                 }
-                if(Q.inputs["down"] || Q.inputs["fire"]){
+                if(Q.inputs["down"] || Q.inputs["fire"]){  //map morph to "A" on mobile for now
                     if(this.p.morph){
                         this.p.angle = 0;
                         this.play("unmorphing",1);
