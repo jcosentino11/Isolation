@@ -6,7 +6,25 @@ $(function() {
                        .touch();
 
     Q.SPRITE_PLAYER = 1;
+    
+    
+    
+//    Q.debug = true;
+//    Q.debugFill = true;
+    
 
+    Q.generateCirclePoints = function(a,b,r){
+        var out = [];
+        for(var i=0;i<Math.PI*2;i+=Math.PI/10){
+            var x = Math.round(a + r * Math.cos(i));
+            var y = Math.round(b + r * Math.sin(i));
+            var point = [x,y];
+            out.push(point);
+        }
+        return out;
+    }
+    
+    
     ////Classes//////////////////////////////////////////////////
 
     /*
@@ -20,17 +38,29 @@ $(function() {
                 sheet: "player",  // Setting a sprite sheet sets sprite width and height
                 sprite: "player",
                 type: Q.SPRITE_PLAYER,
-                points: [ [ -16, 44], [ -23, 35 ], [-23,-48], [23,-48], [23, 35 ], [ 16, 44 ]],
+                walkingPoints: [ [ -16, 44], [ -23, 35 ], [-23,-48], [23,-48], [23, 35 ], [ 16, 44 ]],
+                rollingPoints: Q.generateCirclePoints(0,15,32),
                 jumpSpeed: -400,
                 attack: 5,
-                health: Q.state.get('health')
+                health: Q.state.get('health'),
+                morphing: false,    //true when morphing
+                morph: false,       //true when in morph mode,
+                walkingSpeed: 200,
+                rollingSpeed: 300,
             });
+            
+            this.p.rollAngle = Math.atan(this.p.rollingSpeed/25) * (180 / Math.PI) / 12;
+            this.p.points = this.p.walkingPoints;
+            this.p.speed = this.p.walkingSpeed;
+            
             this.add('2d, platformerControls, animation, tween');
 
             this.on('bump.bottom',this,'stomp');
             this.on('bump.top',this,'attacked');
             this.on('bump.left',this,'attacked');
             this.on('bump.right',this,'attacked');
+            this.on('morphed',this,'morphed');
+            this.on('unmorphed',this,'unmorphed');
         },
 
         attacked: function(col){
@@ -51,15 +81,14 @@ $(function() {
         },
 
         stomp: function(col){
-
-            if(col.obj instanceof Q.Enemy){  
+            if(col.obj instanceof Q.Enemy){ 
                 col.obj.trigger('attack',this.p.attack);
-                this.p.vy = -200;
+                this.p.vy = this.p.jumpSpeed / 2;
             }
             
         },
 
-        move: function(dt){
+        walk: function(dt){ 
             if(this.p.vx > 0) {
                 if(this.p.landed > 0) {
                     this.play("walk_right");
@@ -78,9 +107,52 @@ $(function() {
                 this.play("stand_" + this.p.direction);
             }
         },
+        
+        roll: function(dt){
+            if(this.p.vx > 0) {
+                this.p.angle += this.p.rollAngle;
+            } else if(this.p.vx < 0) {
+                this.p.angle -= this.p.rollAngle;
+            }
+        },
 
         step: function(dt) {
-            this.move(dt);
+            if(!this.p.morphing){
+                if(this.p.morph){
+                   this.roll(dt); 
+                }else{
+                    this.walk(dt);
+                }
+                if(Q.inputs["down"]){
+                    if(this.p.morph){
+                        this.p.angle = 0;
+                        this.play("unmorphing",1);
+                    }else{
+                        this.p.walkingCollisionPoints = this.c.points.slice(0);
+                        this.play("morphing",1);
+                    }
+                    this.p.morphing = true;
+                    this.p.ignoreControls = true;
+                    this.p.vx = 0;
+                }
+            }
+        },
+        
+        morphed: function(){
+            this.p.ignoreControls = false;
+            this.p.morph = true;
+            this.p.morphing = false;
+            this.p.points = this.p.rollingPoints;
+            this.p.speed = this.p.rollingSpeed;
+        },
+        
+        unmorphed: function(){
+            this.p.ignoreControls = false;
+            this.p.morph = false;
+            this.p.morphing = false;
+            this.p.points = this.p.walkingPoints;
+            this.p.speed = this.p.rollingSpeed;
+            this.c.points = this.p.walkingCollisionPoints;  //prevent collision errors after changing points
         }
     });
 
@@ -200,11 +272,6 @@ $(function() {
         stage.add("viewport").follow(Q("Player").first());
 
         var enemy = stage.insert(new Q.Jumper({x: 800, y: 200}));
-
-        
-
-        Q.debug = true;
-        //Q.debugFill = true;
     });
 
     ////Asset Loading  & Game Start//////////////////////////////
@@ -218,6 +285,10 @@ $(function() {
             jump_left: { frames:  [13], rate: 1/10, flip: "x" },
             stand_right: { frames:[14], rate: 1/10, flip: false },
             stand_left: { frames: [14], rate: 1/10, flip:"x" },
+            morphing: { frames: [18,19,20,21,22], rate: 1/2, trigger: "morphed", loop: false },
+            unmorphing: {frames: [22,21,20,19,18], rate: 1/2, trigger: "unmorphed", loop: false }
+            
+            
             // duck_right: { frames: [15], rate: 1/10, flip: false },
             // duck_left: { frames:  [15], rate: 1/10, flip: "x" },
             // climb: { frames:  [16, 17], rate: 1/3, flip: false }
