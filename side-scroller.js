@@ -35,7 +35,7 @@ $(function() {
     Q.Sprite.extend("Player",{
         init: function(p) {
             this._super(p,{
-                sheet: "player",  // Setting a sprite sheet sets sprite width and height
+                sheet: "player1",  // Setting a sprite sheet sets sprite width and height
                 sprite: "player",
                 type: Q.SPRITE_PLAYER,
                 walkingPoints: [ [ -16, 44], [ -23, 35 ], [-23,-48], [23,-48], [23, 35 ], [ 16, 44 ]],
@@ -277,8 +277,12 @@ $(function() {
 
     ////Asset Loading  & Game Start//////////////////////////////
 
-    Q.loadTMX(['level1.tmx','player.png','player.json'], function() {
-        Q.compileSheets('player.png','player.json');
+    Q.loadTMX(['level1.tmx','player1.png','player1.json','player2.png','player2.json','player3.png','player3.json','player4.png','player4.json'], function() {
+        Q.compileSheets('player1.png','player1.json');
+        Q.compileSheets('player2.png','player2.json');
+        Q.compileSheets('player3.png','player3.json');
+        Q.compileSheets('player4.png','player4.json');
+        
         Q.animations("player", {
             walk_right: { frames: [0,1,2,3,4,5,6,7,8,9,10], rate: 1/15, flip: false, loop: true },
             walk_left: { frames:  [0,1,2,3,4,5,6,7,8,9,10], rate: 1/15, flip:"x", loop: true },
