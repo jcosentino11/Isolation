@@ -141,7 +141,8 @@ $(function() {
                 
                 Q.state.dec("oxygen",0.1);
                 
-                if(Q.inputs['regenerate'] && Q.state.get("energy") > 5 && this.p.landed > 0 && !this.p.morph){
+                if(Q.inputs['regenerate'] && Q.state.get("energy") > 5 && this.p.landed > 0 && this.p.vx === 0 && !this.p.morph){
+                    this.play("regenerating",1);
                     Q.state.dec("energy",0.4);
                     Q.state.inc("oxygen",0.2);
                     Q.state.inc("health",0.1);
@@ -578,8 +579,8 @@ $(function() {
             stand_right: { frames:[14], rate: 1/10, flip: false },
             stand_left: { frames: [14], rate: 1/10, flip:"x" },
             morphing: { frames: [18,19,20,21,22], rate: 1/5, trigger: "morphed", loop: false },
-            unmorphing: {frames: [22,21,20,19,18], rate: 1/5, trigger: "unmorphed", loop: false }
-            
+            unmorphing: {frames: [22,21,20,19,18], rate: 1/5, trigger: "unmorphed", loop: false },
+            regenerating: {frames: [20], rate: 1/10, loop: false}
             
             // duck_right: { frames: [15], rate: 1/10, flip: false },
             // duck_left: { frames:  [15], rate: 1/10, flip: "x" },
