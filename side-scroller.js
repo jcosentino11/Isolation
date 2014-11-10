@@ -9,8 +9,8 @@ $(function() {
     
     
     
-    Q.debug = true;
-    Q.debugFill = true;
+//    Q.debug = true;
+//    Q.debugFill = true;
     
 
     Q.generateCirclePoints = function(a,b,r){
@@ -249,9 +249,8 @@ $(function() {
         step: function(dt){
 
         }
-    })
-
-
+    });
+    
     Q.UI.Text.extend("Health",{
         init: function(p){
             this._super({
@@ -270,11 +269,118 @@ $(function() {
             this.p.label = "health: " + health;
         }
     });
+    
+    Q.UI.Button.extend("HUD", {
+        init: function(p) {
+            this._super({
+                asset: 'GUI.png',
+                x: Q.width - 80,
+                y: Q.height - 50
+            });
+        }
+    });
+    
+    Q.UI.Container.extend("Bar", {
+        init: function(p){
+            var props = {
+                fill: 'rgb(255,255,255)',
+                fillColor: 'rgb(255,255,255)', 
+                w: 17, 
+                h: 67, 
+                initialH: 65,
+                on: true, 
+                countdown: -1, 
+                resetCount: 10 
+            };
+            for(var key in p){ props[key] = p[key]; }
+            this._super(props);
+            this.p.initialY = this.p.y;
+        },
+        
+        shrink: function() {
+            this.p.h *= 0.9;
+            this.p.y = this.p.initialY + (this.p.initialH - this.p.h);            
+        },
+        
+        step: function(dt){
+            if(this.p.h < this.p.initialH * 0.25){
+                if(this.p.countdown < 0){
+                    this.p.on = !this.p.on;
+                   if(this.p.on){
+                       this.p.fill = 'rgba(0,0,0,0)';
+                   } else {
+                       this.p.fill = this.p.fillColor;
+                   }
+                    this.p.countdown = this.p.resetCount;
+                }
+                this.p.countdown--;
+            } else {
+                this.p.fill = this.p.fillColor;
+            }
+        }
+    });
+    
+    Q.Bar.extend("HealthBar", {
+        init: function(p){
+            this._super({
+                fill: 'rgb(223,46,46)',
+                fillColor: 'rgb(223,46,46)',
+                x: Q.width - 108,
+                y: Q.height - 49
+            });
+            
+            Q.state.on("change.health", this, "shrink");
+        },
+        
+        step: function(dt){
+            this._super(dt);
+        }
+    });
+    
+    Q.Bar.extend("OxygenBar", {
+        init: function(p){
+            this._super({
+                fill: 'rgb(46,46,223)',
+                fillColor: 'rgb(46,46,223)',
+                x: Q.width - 79,
+                y: Q.height - 49
+            });
+            
+            Q.state.on("change.oxygen", this, "shrink");
+        },
+        
+        step: function(dt){
+            this._super(dt);
+        }
+    });
+    
+    Q.Bar.extend("EnergyBar", {
+        init: function(p){
+            this._super({
+                fill: 'rgb(136, 136, 34)',
+                fillColor: 'rgb(136, 136, 34)',
+                x: Q.width - 50,
+                y: Q.height - 49
+            });
+            
+            Q.state.on("change.energy", this, "shrink");
+        },
+        
+        step: function(dt){
+            this._super(dt);
+        }
+    });
+        
 
     ////Scenes///////////////////////////////////////////////////
 
     Q.scene('hud',function(stage){
         stage.insert(new Q.Health());
+        stage.insert(new Q.HealthBar());
+        stage.insert(new Q.OxygenBar());
+        stage.insert(new Q.EnergyBar());
+        stage.insert(new Q.HUD());
+        
     });
 
     Q.scene('game',function(stage) {
@@ -288,7 +394,7 @@ $(function() {
 
     ////Asset Loading  & Game Start//////////////////////////////
 
-    Q.loadTMX(['level1.tmx','player1.png','player1.json','player2.png','player2.json','player3.png','player3.json','player4.png','player4.json'], function() {
+    Q.loadTMX(['level1.tmx','player1.png','player1.json','player2.png','player2.json','player3.png','player3.json','player4.png','player4.json','GUI.png'], function() {
         Q.compileSheets('player1.png','player1.json');
         Q.compileSheets('player2.png','player2.json');
         Q.compileSheets('player3.png','player3.json');
