@@ -472,6 +472,10 @@ $(function() {
             Q.state.on("change.oxygen", this, "shrink");
         },
         
+        shrink: function(curr) {
+            this._super(curr,Q.maxOxygen);
+        }
+        
         step: function(dt){
             this._super(dt);
         }
@@ -512,7 +516,8 @@ $(function() {
     Q.scene('game',function(stage) {
         Q.maxEnergy = 100;
         Q.maxHealth = 50;
-        Q.state.reset({health: Q.maxHealth, energy: Q.maxEnergy, parts: 0, partsLimit: 6});
+        Q.maxOxygen = 100;
+        Q.state.reset({health: Q.maxHealth, energy: Q.maxEnergy, oxygen: Q.maxOxygen, parts: 0, partsLimit: 6});
         Q.stageScene('hud',1);
         Q.stageTMX("level1.tmx",stage);
         stage.add("viewport").follow(Q("Player").first());
