@@ -453,7 +453,13 @@ $(function() {
         },
         
         shrink: function(curr) {
-            this._super(curr,Q.maxHealth);   
+            if(curr < 0) {
+                Q.state.set("health",0);
+            } else if(curr > Q.maxHealth){
+                Q.state.set("health",Q.maxHealth);
+            } else {
+                this._super(curr,Q.maxHealth); 
+            }
         },
         
         step: function(dt){
@@ -476,6 +482,8 @@ $(function() {
         shrink: function(curr) {
             if(curr < 0){
                 Q.state.set("oxygen", 0);
+            } else if(curr > Q.maxOxygen) {
+                Q.state.set("oxygen", Q.maxOxygen);
             } else {
                 this._super(curr,Q.maxOxygen);
             }
@@ -499,7 +507,13 @@ $(function() {
         },
         
         shrink: function(curr) {
-            this._super(curr,Q.maxEnergy);   
+            if(curr < 0) {
+                Q.state.set("energy",0);
+            } else if(curr > Q.maxEnergy) {
+                Q.state.set("energy",Q.maxEnergy);
+            } else {
+                this._super(curr,Q.maxEnergy); 
+            }
         },
         
         step: function(dt){
