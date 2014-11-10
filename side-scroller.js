@@ -137,6 +137,7 @@ $(function() {
 
         step: function(dt) {    
             if(!this.p.morphing){
+                
                 if(this.p.morph){
                    this.roll(dt); 
                 }else{
@@ -146,7 +147,11 @@ $(function() {
                 if(Q.inputs['sprint'] && !this.p.morph){
                     this.p.speed = this.p.sprintSpeed;
                 }else{
-                    this.p.speed = this.p.walkingSpeed;
+                    if(this.p.morph){
+                        this.p.speed = this.p.rollingSpeed;
+                    } else {
+                        this.p.speed = this.p.walkingSpeed;
+                    }
                 }
                 
                 if((Q.inputs["down"] || Q.inputs["fire"]) && this.p.landed > 0){  //map morph to "A" on mobile for now
