@@ -266,10 +266,51 @@ $(function() {
             this.on("sensor");
         },
         
-        sensor: function(col) {
-            if(col instanceof Q.Player){
+        sensor: function(obj) {
+            if(obj instanceof Q.Player){
                 Q.state.inc("parts",1);
                 this.destroy();
+            }
+        }
+    });
+    
+    Q.Sprite.extend("Ship", {
+        init: function(p) {
+            this._super(p,{
+                sheet: "ship",
+                sensor: true,
+                frame: 6,
+                ready: false,
+                win: false
+            });
+            
+            this.on("sensor");
+            Q.state.on("change.parts",this,"newPart");
+        },
+        
+        newPart: function(){
+            console.log("here");
+            if(Q.state.get("parts") >= Q.state.get("partsLimit")){
+                this.p.ready = true;
+                this.p.frame = 0;
+            } else { 
+                if(this.p.frame > 0)
+                    this.p.frame--;
+            }
+        },
+        
+        sensor: function(obj){
+            if(this.p.ready && obj instanceof Q.Player && !this.p.win){
+                Q("Player").first().destroy();
+                Q.stage().follow(this);
+                this.p.win = true;
+                console.log("WIN GAME");
+            }
+        },
+        
+        step: function(dt) {
+            if(this.p.win){
+                this.p.y -= 2;
             }
         }
     });
@@ -388,22 +429,23 @@ $(function() {
     });
 
     Q.scene('game',function(stage) {
-        Q.state.reset({health: 20, parts: 0});
+        Q.state.reset({health: 20, parts: 0, partsLimit: 7});
         Q.stageScene('hud',1);
         Q.stageTMX("level1.tmx",stage);
         stage.add("viewport").follow(Q("Player").first());
 
-        var enemy = stage.insert(new Q.Jumper({x: 800, y: 200}));
+        var enemy = stage.insert(new Q.Jumper({x: 650, y: 200}));
     });
 
     ////Asset Loading  & Game Start//////////////////////////////
 
-    Q.loadTMX(['level1.tmx','player1.png','player1.json','player2.png','player2.json','player3.png','player3.json','player4.png','player4.json','GUI.png','shipParts.png','shipParts.json'], function() {
+    Q.loadTMX(['level1.tmx','player1.png','player1.json','player2.png','player2.json','player3.png','player3.json','player4.png','player4.json','GUI.png','shipParts.png','shipParts.json','shipsCombined.png','ship.json'], function() {
         Q.compileSheets('player1.png','player1.json');
         Q.compileSheets('player2.png','player2.json');
         Q.compileSheets('player3.png','player3.json');
         Q.compileSheets('player4.png','player4.json');
         Q.compileSheets('shipParts.png','shipParts.json');
+        Q.compileSheets('shipsCombined.png','ship.json');
         
         Q.animations("player", {
             walk_right: { frames: [0,1,2,3,4,5,6,7,8,9,10], rate: 1/15, flip: false, loop: true },

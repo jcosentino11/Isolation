@@ -50,6 +50,14 @@
    </properties>
   </tile>
  </tileset>
+ <tileset firstgid="258" name="shipsCombined" tilewidth="164" tileheight="216">
+  <image source="shipsCombined.png" trans="ff00ff" width="1440" height="216"/>
+  <tile id="6">
+   <properties>
+    <property name="Class" value="Ship"/>
+   </properties>
+  </tile>
+ </tileset>
  <layer name="Collision" width="200" height="20">
   <properties>
    <property name="collision" value="true"/>
@@ -4066,5 +4074,6 @@
   <object gid="257" x="1938" y="120"/>
   <object gid="257" x="3616" y="207"/>
   <object gid="257" x="2882" y="126"/>
+  <object gid="264" x="818" y="351"/>
  </objectgroup>
 </map>
