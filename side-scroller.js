@@ -158,7 +158,7 @@ $(function() {
                 
                 if(Q.inputs['fire'] && !this.p.morph && this.p.reload <= 0){
                     var attX = this.p.direction === "left" ? this.p.x - 80 : this.p.x + 80;
-                    
+                    Q.state.dec('energy',10);
                     this.stage.insert(new Q.EnergyAttack({
                         x: attX,   
                         y: this.p.y,
@@ -416,8 +416,8 @@ $(function() {
             this.p.initialY = this.p.y;
         },
         
-        shrink: function() {
-            this.p.h *= 0.9;
+        shrink: function(curr,max) {
+            this.p.h = this.p.initialH * curr / max;
             this.p.y = this.p.initialY + (this.p.initialH - this.p.h);            
         },
         
@@ -482,7 +482,11 @@ $(function() {
                 y: Q.height - 49
             });
             
-            Q.state.on("change.energy", this, "shrink");
+            Q.state.on("change.energy", this, "shrink",1);
+        },
+        
+        shrink: function(curr) {
+            this._super(curr,Q.maxEnergy);   
         },
         
         step: function(dt){
@@ -502,7 +506,8 @@ $(function() {
     });
 
     Q.scene('game',function(stage) {
-        Q.state.reset({health: 20, parts: 0, partsLimit: 6});
+        Q.maxEnergy = 100;
+        Q.state.reset({health: 20, energy: Q.maxEnergy, parts: 0, partsLimit: 6});
         Q.stageScene('hud',1);
         Q.stageTMX("level1.tmx",stage);
         stage.add("viewport").follow(Q("Player").first());
