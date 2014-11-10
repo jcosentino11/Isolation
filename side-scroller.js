@@ -128,7 +128,7 @@ $(function() {
             }
         },
 
-        step: function(dt) {
+        step: function(dt) {    
             if(!this.p.morphing){
                 if(this.p.morph){
                    this.roll(dt); 
@@ -147,6 +147,14 @@ $(function() {
                     this.p.ignoreControls = true;
                     this.p.vx = 0;
                 }
+            }
+            
+            if(this.p.y > 1500) {
+                this.stage.unfollow();   
+            }
+            
+            if(this.p.y > 2000){
+                Q.stageScene("game");   
             }
         },
         
