@@ -437,7 +437,7 @@ $(function() {
     });
 
     Q.scene('game',function(stage) {
-        Q.state.reset({health: 20, parts: 0, partsLimit: 7});
+        Q.state.reset({health: 20, parts: 0, partsLimit: 6});
         Q.stageScene('hud',1);
         Q.stageTMX("level1.tmx",stage);
         stage.add("viewport").follow(Q("Player").first());

@@ -4068,7 +4068,6 @@
  <objectgroup name="Sprites">
   <object gid="157" x="241" y="135"/>
   <object gid="257" x="641" y="204"/>
-  <object gid="257" x="1228" y="135"/>
   <object gid="257" x="14" y="203"/>
   <object gid="257" x="1215" y="480"/>
   <object gid="257" x="1938" y="120"/>
