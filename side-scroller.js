@@ -10,6 +10,7 @@ $(function() {
     Q.input.bindKey(87, 'up');
     Q.input.bindKey(83, 'down');
     Q.input.bindKey(16, 'sprint');
+    Q.input.bindKey(17, 'regenerate');
     
     Q.SPRITE_PLAYER = 1;
     
@@ -147,6 +148,12 @@ $(function() {
                 
                 Q.state.inc("energy",0.1);
                 Q.state.dec("oxygen",0.1);
+                
+                if(Q.inputs['regenerate'] && !this.p.morph){
+                    Q.state.dec("energy",0.4);
+                    Q.state.inc("oxygen",0.2);
+                    Q.state.inc("health",0.1);
+                }
                 
                 
                 if(Q.inputs['sprint'] && !this.p.morph){
