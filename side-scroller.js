@@ -133,7 +133,7 @@ $(function() {
                 }else{
                     this.walk(dt);
                 }
-                if(Q.inputs["down"] || Q.inputs["fire"]){  //map morph to "A" on mobile for now
+                if((Q.inputs["down"] || Q.inputs["fire"]) && this.p.landed > 0){  //map morph to "A" on mobile for now
                     if(this.p.morph){
                         this.p.angle = 0;
                         this.play("unmorphing",1);
@@ -301,8 +301,8 @@ $(function() {
             jump_left: { frames:  [13], rate: 1/10, flip: "x" },
             stand_right: { frames:[14], rate: 1/10, flip: false },
             stand_left: { frames: [14], rate: 1/10, flip:"x" },
-            morphing: { frames: [18,19,20,21,22], rate: 1/2, trigger: "morphed", loop: false },
-            unmorphing: {frames: [22,21,20,19,18], rate: 1/2, trigger: "unmorphed", loop: false }
+            morphing: { frames: [18,19,20,21,22], rate: 1/5, trigger: "morphed", loop: false },
+            unmorphing: {frames: [22,21,20,19,18], rate: 1/5, trigger: "unmorphed", loop: false }
             
             
             // duck_right: { frames: [15], rate: 1/10, flip: false },
