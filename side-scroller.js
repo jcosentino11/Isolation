@@ -251,25 +251,6 @@ $(function() {
         }
     });
     
-    Q.UI.Text.extend("Health",{
-        init: function(p){
-            this._super({
-                label: "health: " + Q.state.get("health"),
-                x: 70,
-                y: 20,
-                size: 18,
-                family: "Tahoma",
-                color: "white"
-            });
-
-            Q.state.on("change.health",this,"health");
-        },
-
-        health: function(health){
-            this.p.label = "health: " + health;
-        }
-    });
-    
     Q.UI.Button.extend("HUD", {
         init: function(p) {
             this._super({
