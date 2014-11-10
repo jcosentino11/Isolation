@@ -56,7 +56,9 @@ $(function() {
                 walkingSpeed: 200,
                 sprintSpeed: 350,
                 rollingSpeed: 400,
-                bounceBack: 30
+                bounceBack: 30,
+                reloadTime : 30,
+                reload: -1
             });
             
             this.p.rollAngle = Math.atan(this.p.rollingSpeed/25) * (180 / Math.PI) / 12;
@@ -154,7 +156,21 @@ $(function() {
                     }
                 }
                 
-                if((Q.inputs["down"] || Q.inputs["fire"]) && this.p.landed > 0){  //map morph to "A" on mobile for now
+                if(Q.inputs['fire'] && !this.p.morph && this.p.reload <= 0){
+                    var attX = this.p.direction === "left" ? this.p.x - 80 : this.p.x + 80;
+                    
+                    this.stage.insert(new Q.EnergyAttack({
+                        x: attX,   
+                        y: this.p.y,
+                        direction: this.p.direction
+                    }));
+                    
+                    this.p.reload = this.p.reloadTime;
+                }else{
+                    this.p.reload -= 1;
+                }
+                
+                if((Q.inputs["down"]) && this.p.landed > 0){  //map morph to "A" on mobile for now
                     if(this.p.morph){
                         this.p.angle = 0;
                         this.play("unmorphing",1);
@@ -197,6 +213,38 @@ $(function() {
             this.c.points = this.p.walkingCollisionPoints;  //prevent collision errors after changing points
             this.p.cy = 49;
         }
+    });
+    
+    Q.Sprite.extend("EnergyAttack", {
+        init: function(p){
+            this._super(p, {
+                projectileSpeed: 10,
+                scale: 1.5, 
+                sheet: 'playerAttack',
+                sprite: 'attack',
+                attack: 10
+            });
+            
+            this.on('hit');
+            this.add('animation');
+            
+            this.play('energy_attack_' + this.p.direction);
+        },
+        
+        hit: function(col){
+            if(col.obj instanceof Q.Enemy){
+                col.obj.trigger('attack',this.p.attack);
+            }
+            this.destroy();
+        },
+        
+        step: function(dt) {
+            if(this.p.direction === "right")
+                this.p.x += this.p.projectileSpeed;
+            else   
+                this.p.x -= this.p.projectileSpeed;
+        }
+        
     });
 
     Q.Sprite.extend("Enemy", {
@@ -464,13 +512,14 @@ $(function() {
 
     ////Asset Loading  & Game Start//////////////////////////////
 
-    Q.loadTMX(['level1.tmx','player1.png','player1.json','player2.png','player2.json','player3.png','player3.json','player4.png','player4.json','GUI.png','shipParts.png','shipParts.json','shipsCombined.png','ship.json'], function() {
+    Q.loadTMX(['level1.tmx','player1.png','player1.json','player2.png','player2.json','player3.png','player3.json','player4.png','player4.json','GUI.png','shipParts.png','shipParts.json','shipsCombined.png','ship.json','playerAttack.png','playerAttack.json'], function() {
         Q.compileSheets('player1.png','player1.json');
         Q.compileSheets('player2.png','player2.json');
         Q.compileSheets('player3.png','player3.json');
         Q.compileSheets('player4.png','player4.json');
         Q.compileSheets('shipParts.png','shipParts.json');
         Q.compileSheets('shipsCombined.png','ship.json');
+        Q.compileSheets('playerAttack.png','playerAttack.json');
         
         Q.animations("player", {
             walk_right: { frames: [0,1,2,3,4,5,6,7,8,9,10], rate: 1/15, flip: false, loop: true },
@@ -486,6 +535,11 @@ $(function() {
             // duck_right: { frames: [15], rate: 1/10, flip: false },
             // duck_left: { frames:  [15], rate: 1/10, flip: "x" },
             // climb: { frames:  [16, 17], rate: 1/3, flip: false }
+        });
+        
+        Q.animations("attack", {
+            energy_attack_right: {frames: [0,1,2,3], rate: 1/2, loop: false},
+            energy_attack_left: {frames: [0,1,2,3], rate: 1/2, loop: false, flip:"x"}
         });
 
         Q.animations("enemy", {
