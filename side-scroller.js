@@ -157,7 +157,7 @@ $(function() {
                     }
                 }
                 
-                if(Q.inputs['fire'] && Q.state.get("energy") > 0 && !this.p.morph && this.p.reload <= 0){
+                if(Q.inputs['fire'] && Q.state.get("energy") >= 10 && !this.p.morph && this.p.reload <= 0){
                     var attX = this.p.direction === "left" ? this.p.x - 80 : this.p.x + 80;
                     Q.state.dec('energy',10);
                     this.stage.insert(new Q.EnergyAttack({
@@ -171,7 +171,7 @@ $(function() {
                     this.p.reload -= 1;
                 }
                 
-                if((Q.inputs["down"]) && this.p.landed > 0){  //map morph to "A" on mobile for now
+                if((Q.inputs["down"]) && Q.state.get("energy") >= 10 && this.p.landed > 0){  //map morph to "A" on mobile for now
                     if(this.p.morph){
                         this.p.angle = 0;
                         this.play("unmorphing",1);
@@ -179,6 +179,7 @@ $(function() {
                         this.p.walkingCollisionPoints = this.c.points.slice(0);
                         this.play("morphing",1);
                     }
+                    Q.state.dec('energy',10);
                     this.p.morphing = true;
                     this.p.ignoreControls = true;
                     this.p.vx = 0;
