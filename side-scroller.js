@@ -156,7 +156,7 @@ $(function() {
                     }
                 }
                 
-                if(Q.inputs['fire'] && !this.p.morph && this.p.reload <= 0){
+                if(Q.inputs['fire'] && Q.state.get("energy") > 0 && !this.p.morph && this.p.reload <= 0){
                     var attX = this.p.direction === "left" ? this.p.x - 80 : this.p.x + 80;
                     Q.state.dec('energy',10);
                     this.stage.insert(new Q.EnergyAttack({
