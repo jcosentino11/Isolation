@@ -54,6 +54,7 @@ $(function() {
                 morphing: false,    //true when morphing
                 morph: false,       //true when in morph mode,
                 walkingSpeed: 200,
+                sprintSpeed: 350,
                 rollingSpeed: 400,
                 bounceBack: 30
             });
@@ -141,6 +142,13 @@ $(function() {
                 }else{
                     this.walk(dt);
                 }
+                
+                if(Q.inputs['sprint'] && !this.p.morph){
+                    this.p.speed = this.p.sprintSpeed;
+                }else{
+                    this.p.speed = this.p.walkingSpeed;
+                }
+                
                 if((Q.inputs["down"] || Q.inputs["fire"]) && this.p.landed > 0){  //map morph to "A" on mobile for now
                     if(this.p.morph){
                         this.p.angle = 0;
