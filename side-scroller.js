@@ -91,11 +91,6 @@ $(function() {
                     this.p.sheet = "player4";
                 }
 
-                if(this.p.health <= 0){
-                    //player died
-                    Q.stageScene("game");
-                }
-
                 this.p.x += col.normalX * this.p.bounceBack;
                 this.p.y -= this.p.bounceBack / 2;
             }
@@ -145,6 +140,14 @@ $(function() {
                 }else{
                     this.walk(dt);
                 }
+                
+                if(Q.state.get("oxygen") === 0) {
+                    Q.state.dec("health",0.1);   
+                }
+                
+                Q.state.inc("energy",0.1);
+                Q.state.dec("oxygen",0.1);
+                
                 
                 if(Q.inputs['sprint'] && !this.p.morph){
                     this.p.speed = this.p.sprintSpeed;
@@ -454,8 +457,9 @@ $(function() {
         },
         
         shrink: function(curr) {
-            if(curr < 0) {
+            if(curr <= 0) {
                 Q.state.set("health",0);
+                Q.stageScene("game") // game over
             } else if(curr > Q.maxHealth){
                 Q.state.set("health",Q.maxHealth);
             } else {
