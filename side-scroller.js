@@ -5,6 +5,12 @@ $(function() {
                        .controls()
                        .touch();
 
+    Q.input.bindKey(65, 'left');
+    Q.input.bindKey(68, 'right');
+    Q.input.bindKey(87, 'up');
+    Q.input.bindKey(83, 'down');
+    Q.input.bindKey(16, 'sprint');
+    
     Q.SPRITE_PLAYER = 1;
     
     
@@ -297,7 +303,6 @@ $(function() {
         },
         
         newPart: function(){
-            console.log("here");
             if(Q.state.get("parts") >= Q.state.get("partsLimit")){
                 this.p.ready = true;
                 this.p.frame = 0;
@@ -312,7 +317,6 @@ $(function() {
                 Q("Player").first().destroy();
                 Q.stage().follow(this);
                 this.p.win = true;
-                console.log("WIN GAME");
             }
         },
         
