@@ -50,7 +50,6 @@ $(function() {
                 walkingJumpSpeed: -600,
                 rollingJumpSpeed: -300,
                 attack: 5,
-                maxHealth: Q.state.get('health'),
                 health: Q.state.get('health'),
                 morphing: false,    //true when morphing
                 morph: false,       //true when in morph mode,
@@ -81,16 +80,6 @@ $(function() {
             if(col.obj instanceof Q.Enemy){
                 this.p.health -= col.obj.p.attack;
                 Q.state.set('health',this.p.health);
-                
-                if(this.p.health > this.p.maxHealth * 0.75) {
-                   this.p.sheet = "player1";
-                } else if(this.p.health > this.p.maxHealth * 0.5) {
-                    this.p.sheet = "player2";
-                } else if(this.p.health > this.p.maxHealth * 0.25) {
-                    this.p.sheet = "player3";
-                } else {
-                    this.p.sheet = "player4";
-                }
 
                 this.p.x += col.normalX * this.p.bounceBack;
                 this.p.y -= this.p.bounceBack / 2;
@@ -467,6 +456,17 @@ $(function() {
         },
         
         shrink: function(curr) {
+            var player = Q("Player").first();
+            if(curr > Q.maxHealth * 0.75) {
+                player.p.sheet = "player1";
+            } else if(curr > Q.maxHealth * 0.5) {
+                player.p.sheet = "player2";
+            } else if(curr > Q.maxHealth * 0.25) {
+                player.p.sheet = "player3";
+            } else {
+                player.p.sheet = "player4";
+            }           
+            
             if(curr <= 0) {
                 Q.state.set("health",0);
                 Q.stageScene("game") // game over
