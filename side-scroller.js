@@ -146,10 +146,13 @@ $(function() {
                     Q.state.dec("health",0.1);   
                 }
                 
-                Q.state.inc("energy",0.1);
+                if(!Q.inputs['regenerate'] && !Q.inputs['sprint']){
+                    Q.state.inc("energy",0.1);
+                }
+                
                 Q.state.dec("oxygen",0.1);
                 
-                if(Q.inputs['regenerate'] && !this.p.morph){
+                if(Q.inputs['regenerate'] && Q.state.get("energy") > 5&& !this.p.morph){
                     Q.state.dec("energy",0.4);
                     Q.state.inc("oxygen",0.2);
                     Q.state.inc("health",0.1);
