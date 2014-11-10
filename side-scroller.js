@@ -40,7 +40,8 @@ $(function() {
                 type: Q.SPRITE_PLAYER,
                 walkingPoints: [ [ -16, 44], [ -23, 35 ], [-23,-48], [23,-48], [23, 35 ], [ 16, 44 ]],
                 rollingPoints: Q.generateCirclePoints(0,0,33),
-                jumpSpeed: -400,
+                walkingJumpSpeed: -600,
+                rollingJumpSpeed: -300,
                 attack: 5,
                 maxHealth: Q.state.get('health'),
                 health: Q.state.get('health'),
@@ -54,6 +55,7 @@ $(function() {
             this.p.rollAngle = Math.atan(this.p.rollingSpeed/25) * (180 / Math.PI) / 12;
             this.p.points = this.p.walkingPoints;
             this.p.speed = this.p.walkingSpeed;
+            this.p.jumpSpeed = this.p.walkingJumpSpeed;
             
             this.add('2d, platformerControls, animation, tween');
 
@@ -154,6 +156,7 @@ $(function() {
             this.p.morphing = false;
             this.p.points = this.p.rollingPoints;
             this.p.speed = this.p.rollingSpeed;
+            this.p.jumpSpeed = this.p.rollingJumpSpeed;
             this.p.cy = 62;
         },
         
@@ -163,6 +166,7 @@ $(function() {
             this.p.morphing = false;
             this.p.points = this.p.walkingPoints;
             this.p.speed = this.p.walkingSpeed;
+            this.p.jumpSpeed = this.p.walkingJumpSpeed;
             this.c.points = this.p.walkingCollisionPoints;  //prevent collision errors after changing points
             this.p.cy = 49;
         }
