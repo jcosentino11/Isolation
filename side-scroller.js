@@ -356,7 +356,6 @@ $(function() {
     ////Scenes///////////////////////////////////////////////////
 
     Q.scene('hud',function(stage){
-        stage.insert(new Q.Health());
         stage.insert(new Q.HealthBar());
         stage.insert(new Q.OxygenBar());
         stage.insert(new Q.EnergyBar());
