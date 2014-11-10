@@ -482,7 +482,7 @@ $(function() {
                 y: Q.height - 49
             });
             
-            Q.state.on("change.energy", this, "shrink",1);
+            Q.state.on("change.energy", this, "shrink");
         },
         
         shrink: function(curr) {
