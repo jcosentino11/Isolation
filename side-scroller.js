@@ -250,6 +250,26 @@ $(function() {
 
         }
     });
+
+    
+    Q.Sprite.extend("ShipPart", {
+        init: function(p) {
+            this._super(p,{
+                sheet: "shipPart",
+                sensor: true
+            });
+            
+            this.on("sensor");
+        },
+        
+        sensor: function(col) {
+            if(col instanceof Q.Player){
+                Q.state.inc("parts",1);
+                this.destroy();
+            }
+        }
+    });
+    
     
     Q.UI.Button.extend("HUD", {
         init: function(p) {
@@ -364,7 +384,7 @@ $(function() {
     });
 
     Q.scene('game',function(stage) {
-        Q.state.reset({health: 20});
+        Q.state.reset({health: 20, parts: 0});
         Q.stageScene('hud',1);
         Q.stageTMX("level1.tmx",stage);
         stage.add("viewport").follow(Q("Player").first());
@@ -374,11 +394,12 @@ $(function() {
 
     ////Asset Loading  & Game Start//////////////////////////////
 
-    Q.loadTMX(['level1.tmx','player1.png','player1.json','player2.png','player2.json','player3.png','player3.json','player4.png','player4.json','GUI.png'], function() {
+    Q.loadTMX(['level1.tmx','player1.png','player1.json','player2.png','player2.json','player3.png','player3.json','player4.png','player4.json','GUI.png','shipParts.png','shipParts.json'], function() {
         Q.compileSheets('player1.png','player1.json');
         Q.compileSheets('player2.png','player2.json');
         Q.compileSheets('player3.png','player3.json');
         Q.compileSheets('player4.png','player4.json');
+        Q.compileSheets('shipParts.png','shipParts.json');
         
         Q.animations("player", {
             walk_right: { frames: [0,1,2,3,4,5,6,7,8,9,10], rate: 1/15, flip: false, loop: true },
