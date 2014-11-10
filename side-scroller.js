@@ -148,6 +148,7 @@ $(function() {
                 
                 if(Q.inputs['sprint'] && !this.p.morph){
                     this.p.speed = this.p.sprintSpeed;
+                    Q.state.dec("oxygen",0.2);
                 }else{
                     if(this.p.morph){
                         this.p.speed = this.p.rollingSpeed;
@@ -473,8 +474,12 @@ $(function() {
         },
         
         shrink: function(curr) {
-            this._super(curr,Q.maxOxygen);
-        }
+            if(curr < 0){
+                Q.state.set("oxygen", 0);
+            } else {
+                this._super(curr,Q.maxOxygen);
+            }
+        },
         
         step: function(dt){
             this._super(dt);
@@ -516,7 +521,7 @@ $(function() {
     Q.scene('game',function(stage) {
         Q.maxEnergy = 100;
         Q.maxHealth = 50;
-        Q.maxOxygen = 100;
+        Q.maxOxygen = 500;
         Q.state.reset({health: Q.maxHealth, energy: Q.maxEnergy, oxygen: Q.maxOxygen, parts: 0, partsLimit: 6});
         Q.stageScene('hud',1);
         Q.stageTMX("level1.tmx",stage);
