@@ -393,6 +393,7 @@ $(function() {
         step: function(dt) {
             if(this.p.win){
                 this.p.y -= 2;
+                Q.stageScene("winMenu",2);
             }
         }
     });
@@ -586,6 +587,7 @@ $(function() {
         y: Q.height*(3/4)
         }));
         Q.input.on('enter',function() {
+           Q.clearStage(2);
            Q.stageScene("game");
         });
     }));
