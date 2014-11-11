@@ -1,9 +1,10 @@
 $(function() {
-    var Q = window.Q = Quintus()
-                       .include('Input,Sprites,Scenes,Touch,UI,TMX,Anim,2D')
+    var Q = window.Q = Quintus({audioSupported: ['mp3']})
+                       .include('Input,Sprites,Scenes,Touch,UI,TMX,Anim,2D,Audio')
                        .setup({width: 1000, height: 500})
                        .controls()
-                       .touch();
+                       .touch()
+                       .enableSound();
 
     Q.input.bindKey(65, 'left');
     Q.input.bindKey(68, 'right');
@@ -183,9 +184,11 @@ $(function() {
                     if(this.p.morph){
                         this.p.angle = 0;
                         this.play("unmorphing",1);
+                        Q.audio.play("morphUp.mp3");
                     }else{
                         this.p.walkingCollisionPoints = this.c.points.slice(0);
                         this.play("morphing",1);
+                        Q.audio.play("morphDown.mp3");
                     }
                     Q.state.dec('energy',10);
                     this.p.morphing = true;
@@ -301,6 +304,7 @@ $(function() {
 
         attacked: function(attack){
             this.p.health -= attack;
+            Q.audio.play("enemyHit.mp3");
             if(this.p.health <= 0){
                 this.destroy();
             }
@@ -717,11 +721,14 @@ $(function() {
         stage.add("viewport").follow(Q("Player").first());
 
         var enemy = stage.insert(new Q.Jumper({x: 650, y: 200}));
+        var enemy = stage.insert(new Q.Jumper({x: 1229, y: 96}));
+        var enemy = stage.insert(new Q.Jumper({x: 1707, y: 166}));
+        var enemy = stage.insert(new Q.Jumper({x: 2214, y: 166}));
     });
 
     ////Asset Loading  & Game Start//////////////////////////////
 
-    Q.loadTMX(['level1.tmx','player1.png','player1.json','player2.png','player2.json','player3.png','player3.json','player4.png','player4.json','GUI.png','shipParts.png','shipParts.json','shipsCombined.png','ship.json','playerAttack.png','playerAttack.json'], function() {
+    Q.loadTMX(['level1.tmx','player1.png','player1.json','player2.png','player2.json','player3.png','player3.json','player4.png','player4.json','GUI.png','shipParts.png','shipParts.json','shipsCombined.png','ship.json','playerAttack.png','playerAttack.json','morphDown.mp3','morphUp.mp3','landing.mp3','jumping.mp3','enemyHit.mp3'], function() {
         Q.compileSheets('player1.png','player1.json');
         Q.compileSheets('player2.png','player2.json');
         Q.compileSheets('player3.png','player3.json');
