@@ -1,7 +1,7 @@
 $(function() {
     var Q = window.Q = Quintus()
                        .include('Input,Sprites,Scenes,Touch,UI,TMX,Anim,2D')
-                       .setup({width: 1000, height: 300})
+                       .setup({width: 1000, height: 500})
                        .controls()
                        .touch();
 
