@@ -9,15 +9,10 @@ $(function() {
     Q.input.bindKey(68, 'right');
     Q.input.bindKey(87, 'up');
     Q.input.bindKey(83, 'down');
-    //Shift
-    Q.input.bindKey(16, 'sprint');
-    //Control
-    Q.input.bindKey(17, 'regenerate');
-    //Spacebar
-    Q.input.bindKey(13, 'enter');
+    Q.input.bindKey(16, 'sprint');      //Shift
+    Q.input.bindKey(17, 'regenerate');  //Control
     
     Q.SPRITE_PLAYER = 1;
-    
     
     
 //    Q.debug = true;
@@ -126,7 +121,13 @@ $(function() {
             }
         },
 
-        step: function(dt) {    
+        step: function(dt) {
+            if(Q.state.get('menu')){
+                this.p.vx = 0;
+                this.p.vy = 0;
+                return;
+            }
+            
             if(!this.p.morphing){
                 
                 if(this.p.morph){
@@ -198,7 +199,11 @@ $(function() {
             }
             
             if(this.p.y > 2000){
-                Q.stageScene("lossMenu");   
+                if(!Q.state.get('menu')) {
+                    Q.stageScene("lossMenu");
+                } else {
+                    Q.stageScene("game");
+                }
             }
         },
         
@@ -387,13 +392,17 @@ $(function() {
                 Q("Player").first().destroy();
                 Q.stage().follow(this);
                 this.p.win = true;
+                if(!Q.state.get("menu")){
+                    Q.stageScene("winMenu",2);
+                } else {
+                    Q.stageScene("game");
+                }
             }
         },
         
         step: function(dt) {
             if(this.p.win){
-                this.p.y -= 2;
-                Q.stageScene("winMenu",2);
+                this.p.y -= 2;  
             }
         }
     });
@@ -475,7 +484,11 @@ $(function() {
             
             if(curr <= 0) {
                 Q.state.set("health",0);
-                Q.stageScene("lossMenu") // game over
+                if(!Q.state.get('menu')) {
+                    Q.stageScene("lossMenu");
+                } else {
+                    Q.stageScene("game");
+                }
             } else if(curr > Q.maxHealth){
                 Q.state.set("health",Q.maxHealth);
             } else {
@@ -546,75 +559,144 @@ $(function() {
     ////Scenes///////////////////////////////////////////////////
     
     Q.scene('mainMenu', function(stage) {
-        stage.insert(new Q.UI.Text({ 
-            label: "Isolation!",
-            color: "blue",
-            x: Q.width/2, 
-            y: Q.height/4
-        }));
-       
-        stage.insert(new Q.UI.Text({ 
-            label: "You have crashed on a strange planet.  Find your ship parts to repair your ship.\n" +
-                   "Left arrow moves you left.\n" +
-                   "Right arrow moves you right.\n" +
-                   "Down arrow morphs you into a ball to get into tight spaces.\n" +
-                   "Spacebar fires an attack and uses energy.\n" +
-                   "Hold shift to sprint, beware you will use oxygen rapidly.\n" +
-                   "Control regenerates health and oxygen at the cost of energy.\n" +
-                   "Press enter to begin!",
-            color: "yellow",
-            size: "12",
-            x: Q.width/2, 
-            y: Q.height*(3/4)
+        
+        Q.state.set('menu',true);
+        
+        var container = stage.insert(new Q.UI.Container({
+            fill: 'rgba(200,200,200,0.8)',
+            w: Q.width,
+            h: Q.height,
+            x: Q.width / 2,
+            y: Q.height / 2
         }));
         
-        Q.input.on('enter',function() {
-           Q.stageScene("game");
-        });
+        var title = stage.insert(new Q.UI.Text({ 
+            label: "Isolation",
+            family: "Tahoma",
+            color: "black",
+            size: "40",
+            x: 0, 
+            y: -20
+        }),container);
+       
+        var description = stage.insert(new Q.UI.Text({
+            label: "The ship is your only escape.\n",
+            family: "Tahoma",
+            color: "grey",
+            size: "18",
+            x: 0, 
+            y: 25
+        }),container);
+        
+        var startButton = stage.insert(new Q.UI.Button({
+            label: 'start',
+            font: '800 24px Tahoma',
+            fontColor: 'lightgrey',
+            fill: 'grey',
+            stroke: 'white',
+            border: 2,
+            y: 100,
+            x: 0,
+            w: 150
+        }, function() {
+            Q.stageScene('game');
+            Q.stageScene(null, 2);
+            Q.state.set('menu',false);
+        }), container);
     });
     
     Q.scene('winMenu', function(stage) {
-        stage.insert(new Q.UI.Text({ 
-            label: "YOU WON!",
-            color: "green",
-            x: Q.width/2, 
-            y: Q.height/4
+        
+        Q.state.set('menu',true);
+        
+        var container = stage.insert(new Q.UI.Container({
+            fill: 'rgba(200,200,200,0.8)',
+            w: Q.width,
+            h: Q.height,
+            x: Q.width / 2,
+            y: Q.height / 2
         }));
         
-        stage.insert(new Q.UI.Text({ 
-            label: "Well, kind of.  Turns out you were no rocket scientist.\n" +
-                   "Press Enter to play again.",
-            color: "yellow",
-            size: "12",
-            x: Q.width/2, 
-            y: Q.height*(3/4)
-        }));
+        var title = stage.insert(new Q.UI.Text({ 
+            label: "Congratulations",
+            family: "Tahoma",
+            color: "black",
+            size: "40",
+            x: 0, 
+            y: -20
+        }),container);
+
+        var description = stage.insert(new Q.UI.Text({
+            label: "You survived!",
+            family: "Tahoma",
+            color: "grey",
+            size: "18",
+            x: 0, 
+            y: 25
+        }),container);
         
-        Q.input.on('enter',function() {
-           Q.clearStage(2);
-           Q.stageScene("game");
-        });
+        var startButton = stage.insert(new Q.UI.Button({
+            label: 'play again',
+            font: '800 24px Tahoma',
+            fontColor: 'lightgrey',
+            fill: 'grey',
+            stroke: 'white',
+            border: 2,
+            y: 100,
+            x: 0,
+            w: 150
+        }, function() {
+            Q.stageScene('game');
+            Q.stageScene(null, 2);
+            Q.state.set('menu',false);
+        }), container);
     });
     
-    Q.scene('lossMenu', function(stage) {
-        stage.insert(new Q.UI.Text({ 
-            label: "Sorry, You lost.",
-            color: "red",
-            x: Q.width/2, 
-            y: Q.height/4
+     Q.scene('lossMenu', function(stage) {
+        
+        Q.state.set('menu',true);
+         
+        var container = stage.insert(new Q.UI.Container({
+            fill: 'rgba(200,200,200,0.8)',
+            w: Q.width,
+            h: Q.height,
+            x: Q.width / 2,
+            y: Q.height / 2
         }));
         
-        stage.insert(new Q.UI.Text({ 
-            label: "Press Enter to play again.",
-            color: "green",
-            size: "12",
-            x: Q.width/2, 
-            y: Q.height*(3/4)
-        }));
+        var title = stage.insert(new Q.UI.Text({ 
+            label: "Oh no...",
+            family: "Tahoma",
+            color: "black",
+            size: "40",
+            x: 0, 
+            y: -20
+        }),container);
+
+        var description = stage.insert(new Q.UI.Text({
+            label: "You failed to build the ship in time",
+            family: "Tahoma",
+            color: "grey",
+            size: "18",
+            x: 0, 
+            y: 25
+        }),container);
         
-        Q.input.on('enter',function() {
-           Q.stageScene("game");
-        });
+        var startButton = stage.insert(new Q.UI.Button({
+            label: 'play again',
+            font: '800 24px Tahoma',
+            fontColor: 'lightgrey',
+            fill: 'grey',
+            stroke: 'white',
+            border: 2,
+            y: 100,
+            x: 0,
+            w: 150
+        }, function() {
+            Q.stageScene('game');
+            Q.stageScene(null, 2);
+            Q.state.set('menu',false);
+        }), container);
     });
 
     Q.scene('hud',function(stage){
@@ -629,7 +711,7 @@ $(function() {
         Q.maxEnergy = 100;
         Q.maxHealth = 50;
         Q.maxOxygen = 500;
-        Q.state.reset({health: Q.maxHealth, energy: Q.maxEnergy, oxygen: Q.maxOxygen, parts: 0, partsLimit: 6});
+        Q.state.reset({health: Q.maxHealth, energy: Q.maxEnergy, oxygen: Q.maxOxygen, parts: 0, partsLimit: 6, menu: Q.state.get('menu')});
         Q.stageScene('hud',1);
         Q.stageTMX("level1.tmx",stage);
         stage.add("viewport").follow(Q("Player").first());
@@ -680,7 +762,9 @@ $(function() {
             // duck_left: { frames:  [15], rate: 1/10, flip: "x" },
             // climb: { frames:  [16, 17], rate: 1/3, flip: false }
         });
-
-        Q.stageScene('mainMenu');
+        
+        Q.stageScene('game');
+        Q.stageScene('mainMenu',2);
+        
     });
 });
