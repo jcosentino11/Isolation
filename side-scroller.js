@@ -14,7 +14,7 @@ $(function() {
     //Control
     Q.input.bindKey(17, 'regenerate');
     //Spacebar
-    Q.input.bindKey(32, 'fire');
+    Q.input.bindKey(13, 'enter');
     
     Q.SPRITE_PLAYER = 1;
     
@@ -148,7 +148,7 @@ $(function() {
                 if(Q.inputs['regenerate'] && Q.state.get("energy") > 5 && this.p.landed > 0 && this.p.vx === 0 && !this.p.morph){
                     this.play("regenerating",1);
                     Q.state.dec("energy",0.4);
-                    Q.state.inc("oxygen",0.6);
+                    Q.state.inc("oxygen",0.3);
                     Q.state.inc("health",0.1);
                 }
                 
@@ -558,13 +558,13 @@ $(function() {
         Spacebar fires an attack and uses energy.  \n\
         Hold shift to sprint, beware you will use oxygen rapidly.  \n\
         Control regenerates health and oxygen at the cost of energy.  \n\
-        Press space to begin!",
+        Press enter to begin!",
         color: "yellow",
         size: "12",
         x: Q.width/2, 
         y: Q.height*(3/4)
         }));
-        Q.input.on('fire',function() {
+        Q.input.on('enter',function() {
            Q.stageScene("game");
         });
     }));
