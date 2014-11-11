@@ -552,9 +552,10 @@ $(function() {
         y: Q.height/4
         }));
         stage.insert(new Q.UI.Text({ 
-        label: "        You have crashe on a strange planet.  Find your ship parts to repair your ship.  \n\
+        label: "        You have crashed on a strange planet.  Find your ship parts to repair your ship.  \n\
         Left arrow moves you left.  \n\
         Right arrow moves you right.  \n\
+        Down arrow morphs you into a ball to get into tight spaces.  \n\
         Spacebar fires an attack and uses energy.  \n\
         Hold shift to sprint, beware you will use oxygen rapidly.  \n\
         Control regenerates health and oxygen at the cost of energy.  \n\
