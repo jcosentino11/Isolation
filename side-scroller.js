@@ -539,6 +539,31 @@ $(function() {
         
 
     ////Scenes///////////////////////////////////////////////////
+    
+    Q.scene('mainMenu',new Q.Scene(function(stage) {
+        stage.insert(new Q.UI.Text({ 
+        label: "Isolation!",
+        color: "blue",
+        x: Q.width/2, 
+        y: Q.height/4
+        }));
+        stage.insert(new Q.UI.Text({ 
+        label: "        You have crashe on a strange planet.  Find your ship parts to repair your ship.  \n\
+        Left arrow moves you left.  \n\
+        Right arrow moves you right.  \n\
+        Spacebar fires an attack and uses energy.  \n\
+        Hold shift to sprint, beware you will use oxygen rapidly.  \n\
+        Control regenerates health and oxygen at the cost of energy.  \n\
+        Press space to begin!",
+        color: "yellow",
+        size: "12",
+        x: Q.width/2, 
+        y: Q.height*(3/4)
+        }));
+        Q.input.on('fire',function() {
+           Q.stageScene("game");
+        });
+    }));
 
     Q.scene('hud',function(stage){
         stage.insert(new Q.HealthBar());
@@ -604,6 +629,6 @@ $(function() {
             // climb: { frames:  [16, 17], rate: 1/3, flip: false }
         });
 
-        Q.stageScene('game');
+        Q.stageScene('mainMenu');
     });
 });
