@@ -264,14 +264,8 @@ $(function() {
     Q.Sprite.extend("Enemy", {
         init: function(p) {
             this._super(p, {
-                sheet: "player",
-                sprite: "enemy",
-                scale: 0.6,
                 health: 5,
-                points: [ [ -16, 44], [ -23, 35 ], [-23,-48], [23,-48], [23, 35 ], [ 16, 44 ]],
-                jumpSpeed: -200,
                 attack: 1,
-                direction: "right"
             });
 
             this.add('2d, animation, tween');
@@ -279,25 +273,25 @@ $(function() {
             this.on('attack',this,'attacked');
         },
 
-        move: function(dt){
-            if(this.p.vx > 0) {
-                if(this.p.landed > 0) {
-                    this.play("walk_right");
-                } else {
-                    this.play("jump_right");
-                }
-                this.p.direction = "right";
-            } else if(this.p.vx < 0) {
-                if(this.p.landed > 0) {
-                    this.play("walk_left");
-                } else {
-                    this.play("jump_left");
-                }
-                this.p.direction = "left";
-            } else {
-                this.play("stand_" + this.p.direction);
-            }
-        },
+//        move: function(dt){
+//            if(this.p.vx > 0) {
+//                if(this.p.landed > 0) {
+//                    this.play("walk_right");
+//                } else {
+//                    this.play("jump_right");
+//                }
+//                this.p.direction = "right";
+//            } else if(this.p.vx < 0) {
+//                if(this.p.landed > 0) {
+//                    this.play("walk_left");
+//                } else {
+//                    this.play("jump_left");
+//                }
+//                this.p.direction = "left";
+//            } else {
+//                this.play("stand_" + this.p.direction);
+//            }
+//        },
 
         attacked: function(attack){
             this.p.health -= attack;
@@ -306,10 +300,37 @@ $(function() {
             }
         },
 
-        step: function(dt){
-            this.move(dt);
-        }
+//        step: function(dt){
+//            this.move(dt);
+//        }
     });
+    
+//    Q.Enemy.extend("Flyer", {
+//        init: function(p) {
+//            var obj = { 
+//                sprite: "flyer", 
+//                sheet: "flyer",
+//                direction: "left",
+//                scale: 2,
+//                health: 30
+//            };
+//            for(var key in obj){ obj[key] = p[key]; }
+//            this._super(obj);
+//        },
+//        
+//        step: function(dt){
+//            console.log(this.p.y);
+//            if(this.p.vx > 0) {
+//                this.p.direction = "right";
+//                this.play("float_right");
+//            } else if(this.p.vx < 0) {
+//                this.play("float_left");
+//                this.p.direction = "left"
+//            } else {
+//                this.play("float_"+this.p.direction);
+//            }
+//        } 
+//    });
 
     Q.Enemy.extend("Jumper", {
         init: function(p) {
@@ -716,7 +737,8 @@ $(function() {
         Q.stageTMX("level1.tmx",stage);
         stage.add("viewport").follow(Q("Player").first());
 
-        var enemy = stage.insert(new Q.Jumper({x: 650, y: 200}));
+       // var enemy = stage.insert(new Q.Jumper({x: 650, y: 200}));
+//        stage.insert(new Q.Flyer({x: 550, y: 200}));
     });
 
     ////Asset Loading  & Game Start//////////////////////////////
@@ -729,6 +751,7 @@ $(function() {
         Q.compileSheets('shipParts.png','shipParts.json');
         Q.compileSheets('shipsCombined.png','ship.json');
         Q.compileSheets('playerAttack.png','playerAttack.json');
+        Q.compileSheets('flyer.png','flyer.json');
         
         Q.animations("player", {
             walk_right: { frames: [0,1,2,3,4,5,6,7,8,9,10], rate: 1/15, flip: false, loop: true },
@@ -761,6 +784,11 @@ $(function() {
             // duck_right: { frames: [15], rate: 1/10, flip: false },
             // duck_left: { frames:  [15], rate: 1/10, flip: "x" },
             // climb: { frames:  [16, 17], rate: 1/3, flip: false }
+        });
+        
+        Q.animations("flyer", {
+            float_left: {frames: [0,1,2], rate: 1/5, loop: true, flip: false },
+            float_right: {frames: [0,1,2], rate: 1/5, loop: true, flip: 'x' }
         });
         
         Q.stageScene('game');
