@@ -545,71 +545,77 @@ $(function() {
 
     ////Scenes///////////////////////////////////////////////////
     
-    Q.scene('mainMenu',new Q.Scene(function(stage) {
+    Q.scene('mainMenu', function(stage) {
         stage.insert(new Q.UI.Text({ 
-        label: "Isolation!",
-        color: "blue",
-        x: Q.width/2, 
-        y: Q.height/4
+            label: "Isolation!",
+            color: "blue",
+            x: Q.width/2, 
+            y: Q.height/4
         }));
+       
         stage.insert(new Q.UI.Text({ 
-        label: "        You have crashed on a strange planet.  Find your ship parts to repair your ship.  \n\
-        Left arrow moves you left.  \n\
-        Right arrow moves you right.  \n\
-        Down arrow morphs you into a ball to get into tight spaces.  \n\
-        Spacebar fires an attack and uses energy.  \n\
-        Hold shift to sprint, beware you will use oxygen rapidly.  \n\
-        Control regenerates health and oxygen at the cost of energy.  \n\
-        Press enter to begin!",
-        color: "yellow",
-        size: "12",
-        x: Q.width/2, 
-        y: Q.height*(3/4)
+            label: "You have crashed on a strange planet.  Find your ship parts to repair your ship.\n" +
+                   "Left arrow moves you left.\n" +
+                   "Right arrow moves you right.\n" +
+                   "Down arrow morphs you into a ball to get into tight spaces.\n" +
+                   "Spacebar fires an attack and uses energy.\n" +
+                   "Hold shift to sprint, beware you will use oxygen rapidly.\n" +
+                   "Control regenerates health and oxygen at the cost of energy.\n" +
+                   "Press enter to begin!",
+            color: "yellow",
+            size: "12",
+            x: Q.width/2, 
+            y: Q.height*(3/4)
         }));
+        
         Q.input.on('enter',function() {
            Q.stageScene("game");
         });
-    }));
+    });
     
-    Q.scene('winMenu',new Q.Scene(function(stage) {
+    Q.scene('winMenu', function(stage) {
         stage.insert(new Q.UI.Text({ 
-        label: "YOU WON!",
-        color: "green",
-        x: Q.width/2, 
-        y: Q.height/4
+            label: "YOU WON!",
+            color: "green",
+            x: Q.width/2, 
+            y: Q.height/4
         }));
+        
         stage.insert(new Q.UI.Text({ 
-        label: "Well, kind of.  Turns out you were no rocket scientist.\n\
-            Press Enter to play again.",
-        color: "yellow",
-        size: "12",
-        x: Q.width/2, 
-        y: Q.height*(3/4)
+            label: "Well, kind of.  Turns out you were no rocket scientist.\n" +
+                   "Press Enter to play again.",
+            color: "yellow",
+            size: "12",
+            x: Q.width/2, 
+            y: Q.height*(3/4)
         }));
+        
         Q.input.on('enter',function() {
            Q.clearStage(2);
            Q.stageScene("game");
         });
-    }));
+    });
     
-    Q.scene('lossMenu',new Q.Scene(function(stage) {
+    Q.scene('lossMenu', function(stage) {
         stage.insert(new Q.UI.Text({ 
-        label: "Sorry, You lost.",
-        color: "red",
-        x: Q.width/2, 
-        y: Q.height/4
+            label: "Sorry, You lost.",
+            color: "red",
+            x: Q.width/2, 
+            y: Q.height/4
         }));
+        
         stage.insert(new Q.UI.Text({ 
-        label: "Press Enter to play again.",
-        color: "green",
-        size: "12",
-        x: Q.width/2, 
-        y: Q.height*(3/4)
+            label: "Press Enter to play again.",
+            color: "green",
+            size: "12",
+            x: Q.width/2, 
+            y: Q.height*(3/4)
         }));
+        
         Q.input.on('enter',function() {
            Q.stageScene("game");
         });
-    }));
+    });
 
     Q.scene('hud',function(stage){
         stage.insert(new Q.HealthBar());
