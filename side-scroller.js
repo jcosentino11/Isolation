@@ -149,7 +149,7 @@ $(function() {
                 if(Q.inputs['regenerate'] && Q.state.get("energy") > 5 && this.p.landed > 0 && this.p.vx === 0 && !this.p.morph){
                     this.play("regenerating",1);
                     Q.state.dec("energy",0.4);
-                    Q.state.inc("oxygen",0.5);
+                    Q.state.inc("oxygen",0.4);
                     Q.state.inc("health",0.1);
                 }
                 
@@ -721,7 +721,7 @@ $(function() {
 
     ////Asset Loading  & Game Start//////////////////////////////
 
-    Q.loadTMX(['level1.tmx','player1.png','player1.json','player2.png','player2.json','player3.png','player3.json','player4.png','player4.json','GUI.png','shipParts.png','shipParts.json','shipsCombined.png','ship.json','playerAttack.png','playerAttack.json'], function() {
+    Q.loadTMX(['level1.tmx','player1.png','player1.json','player2.png','player2.json','player3.png','player3.json','player4.png','player4.json','GUI.png','shipParts.png','shipParts.json','shipsCombined.png','ship.json','playerAttack.png','playerAttack.json','flyer.png','flyer.json'], function() {
         Q.compileSheets('player1.png','player1.json');
         Q.compileSheets('player2.png','player2.json');
         Q.compileSheets('player3.png','player3.json');
