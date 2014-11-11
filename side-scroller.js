@@ -11,6 +11,7 @@ $(function() {
     Q.input.bindKey(83, 'down');
     Q.input.bindKey(16, 'sprint');
     Q.input.bindKey(17, 'regenerate');
+    Q.input.bindKey(32, 'fire');
     
     Q.SPRITE_PLAYER = 1;
     
