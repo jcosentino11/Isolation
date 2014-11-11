@@ -148,7 +148,7 @@ $(function() {
                 if(Q.inputs['regenerate'] && Q.state.get("energy") > 5 && this.p.landed > 0 && this.p.vx === 0 && !this.p.morph){
                     this.play("regenerating",1);
                     Q.state.dec("energy",0.4);
-                    Q.state.inc("oxygen",0.3);
+                    Q.state.inc("oxygen",0.4);
                     Q.state.inc("health",0.1);
                 }
                 
@@ -198,7 +198,7 @@ $(function() {
             }
             
             if(this.p.y > 2000){
-                Q.stageScene("game");   
+                Q.stageScene("lossMenu");   
             }
         },
         
@@ -474,7 +474,7 @@ $(function() {
             
             if(curr <= 0) {
                 Q.state.set("health",0);
-                Q.stageScene("game") // game over
+                Q.stageScene("lossMenu") // game over
             } else if(curr > Q.maxHealth){
                 Q.state.set("health",Q.maxHealth);
             } else {
@@ -561,6 +561,45 @@ $(function() {
         Control regenerates health and oxygen at the cost of energy.  \n\
         Press enter to begin!",
         color: "yellow",
+        size: "12",
+        x: Q.width/2, 
+        y: Q.height*(3/4)
+        }));
+        Q.input.on('enter',function() {
+           Q.stageScene("game");
+        });
+    }));
+    
+    Q.scene('winMenu',new Q.Scene(function(stage) {
+        stage.insert(new Q.UI.Text({ 
+        label: "YOU WON!",
+        color: "green",
+        x: Q.width/2, 
+        y: Q.height/4
+        }));
+        stage.insert(new Q.UI.Text({ 
+        label: "Well, kind of.  Turns out you were no rocket scientist.\n\
+            Press Enter to play again.",
+        color: "yellow",
+        size: "12",
+        x: Q.width/2, 
+        y: Q.height*(3/4)
+        }));
+        Q.input.on('enter',function() {
+           Q.stageScene("game");
+        });
+    }));
+    
+    Q.scene('lossMenu',new Q.Scene(function(stage) {
+        stage.insert(new Q.UI.Text({ 
+        label: "Sorry, You lost.",
+        color: "red",
+        x: Q.width/2, 
+        y: Q.height/4
+        }));
+        stage.insert(new Q.UI.Text({ 
+        label: "Press Enter to play again.",
+        color: "green",
         size: "12",
         x: Q.width/2, 
         y: Q.height*(3/4)
