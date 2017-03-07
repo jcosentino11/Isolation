@@ -12,4 +12,6 @@ Controls
 | Cntrl            | Regenerate |
 | Space            | Attack     |
 
+Screenshot
+----------
 ![Isolation](https://josephcosentino.me/isolation/images/isolation.png "Isolation")
