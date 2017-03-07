@@ -1,4 +1,4 @@
-Isolation
+[Isolation](https://josephcosentino.me/isolation)
 =========
 Isolation is a side-scroller video game where you must repair your ship and escape in order to survive. Built with the <a href="https://github.com/cykod/Quintus">Quintus</a> javascript game engine.
 
@@ -9,6 +9,7 @@ Controls
 | Left/Right Arrow | Move       |
 | Up Arrow         | Jump       |
 | Down Arrow       | Morph      |
+| Shift            | Sprint     |
 | Cntrl            | Regenerate |
 | Space            | Attack     |
 
